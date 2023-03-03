@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mecanum_robot">
-
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="CRAP">
   <!-- Define the base link of the robot -->
   <link name="base_link">
     <inertial>
@@ -11,7 +10,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <box size="0.5 0.5 0.1"/>
+        <box size="0.5 0.5 0.05"/>
       </geometry>
       <material name="red">
         <color rgba="1 0 0 1"/>
@@ -19,25 +18,36 @@
     </visual>
   </link>
 
-  <!-- Define the four mecanum wheels -->
-  <xacro:include filename="$(find CRAP_sim_def)/urdf/wheel.xacro"/>
-  <wheel name="front_left_wheel" parent="base_link" x="0.25" y="0.25" />
-  <wheel name="front_right_wheel" parent="base_link" x="0.25" y="-0.25" />
-  <wheel name="rear_left_wheel" parent="base_link" x="-0.25" y="0.25" />
-  <wheel name="rear_right_wheel" parent="base_link" x="-0.25" y="-0.25" />
+  <!-- Define the four  wheels -->
+  <xacro:include filename="wheel.xacro"/>
+  <xacro:wheel name="front_left_wheel" parent="base_link" x="0.25" y="0.25" />
+  <xacro:wheel name="front_right_wheel" parent="base_link" x="0.25" y="-0.25" />
+  <xacro:wheel name="rear_left_wheel" parent="base_link" x="-0.25" y="0.25" />
+  <xacro:wheel name="rear_right_wheel" parent="base_link" x="-0.25" y="-0.25" />
 
   <!-- Define the LIDAR sensor -->
-  <xacro:include filename="$(find CRAP_sim_def)/urdf/lidar.xacro"/>
-  <lidar name="hokuyo" parent="base_link" x="0" y="0" z="0.2" />
-
-  <!-- Define the stereo camera -->
-  <!-- <xacro:include filename="$(find sCRAP_sim_def)/urdf/stereo_camera.xacro"/>
-  <stereo_camera name="stereo_camera_sensor" parent="base_link" x="0" y="0" z="0.1" /> -->
+  <xacro:include filename="lidar_gazebo.xacro"/>
+  <xacro:rplidar prefix="lidar" parent="base_link" x="0" y="0" z="0.05"/>
 
   <!-- Define the rgbd camera -->
-  <!-- <xacro:include filename="$(find sCRAP_sim_def)/urdf/stereo_camera.xacro"/>
-  <stereo_camera name="stereo_camera_sensor" parent="base_link" x="0" y="0" z="0.1" /> -->
-
-  <xacro:include filename="$(find CRAP_sim_def)/urdf/CRAP.gazebo" />
+  <xacro:include filename="kinect_gazebo.xacro"/>
+  <xacro:kinect_camera prefix="kinect" parent="base_link" x="0.27" y="0" z="0"/>
+  
+  <gazebo>
+    <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
+      <updateRate>100.0</updateRate>
+      <robotNamespace>/</robotNamespace>
+      <leftFrontJoint>front_left_wheel_joint</leftFrontJoint>
+      <rightFrontJoint>front_right_wheel_joint</rightFrontJoint>
+      <leftRearJoint>back_left_wheel_joint</leftRearJoint>
+      <rightRearJoint>back_right_wheel_joint</rightRearJoint>
+      <wheelSeparation>0.5</wheelSeparation>
+      <wheelDiameter>0.2</wheelDiameter>
+      <robotBaseFrame>base_link</robotBaseFrame>
+      <torque>10</torque>
+      <topicName>cmd_vel</topicName>
+      <broadcastTF>false</broadcastTF>
+    </plugin>
+  </gazebo>
 
 </robot>

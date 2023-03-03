@@ -1,0 +1,15 @@
+package.xml
+setup.cfg
+setup.py
+../../build/CRAP_sim_def/CRAP_sim_def.egg-info/PKG-INFO
+../../build/CRAP_sim_def/CRAP_sim_def.egg-info/SOURCES.txt
+../../build/CRAP_sim_def/CRAP_sim_def.egg-info/dependency_links.txt
+../../build/CRAP_sim_def/CRAP_sim_def.egg-info/entry_points.txt
+../../build/CRAP_sim_def/CRAP_sim_def.egg-info/requires.txt
+../../build/CRAP_sim_def/CRAP_sim_def.egg-info/top_level.txt
+../../build/CRAP_sim_def/CRAP_sim_def.egg-info/zip-safe
+CRAP_sim_def/__init__.py
+resource/CRAP_sim_def
+test/test_copyright.py
+test/test_flake8.py
+test/test_pep257.py
