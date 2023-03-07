@@ -23,6 +23,8 @@ setup(
          'node_helloworld       = learning_node.node_helloworld:main',
          'node_object            = learning_node.node_object:main',
          'node_object_webcam     = learning_node.node_object_webcam:main',
+         'node_object_webcam_1pp     = learning_node.node_object_webcam_1pp:main',
+         'node_object_1pp           = learning_node.node_object_1pp:main',
         ],
     },
 )

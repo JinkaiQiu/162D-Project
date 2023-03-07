@@ -15,7 +15,7 @@ def main(args=None):                             # ROS2节点主入口main函数
     node = Node("node_helloworld")               # 创建ROS2节点对象并进行初始化
     
     while rclpy.ok():                            # ROS2系统是否正常运行
-        node.get_logger().info("Hello March 7th!")    # ROS2日志输出
+        node.get_logger().info("Hello March 6th!")    # ROS2日志输出
         time.sleep(0.5)                          # 休眠控制循环时间
     
     node.destroy_node()                          # 销毁节点对象    

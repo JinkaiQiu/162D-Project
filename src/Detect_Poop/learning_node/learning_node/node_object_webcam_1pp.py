@@ -16,18 +16,40 @@ lower_brown = np.array([0, 30, 70])     # Poop的HSV阈值下限
 upper_brown = np.array([40, 225, 180])  # Poop的HSV阈值上限
 
 def object_detect(image):
+    max_area = 0
+    max_cnt = None
     hsv_img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)                       # 图像从BGR颜色模型转换为HSV模型
     mask_red = cv2.inRange(hsv_img, lower_brown, upper_brown)                  # 图像二值化
 
     contours, hierarchy = cv2.findContours(mask_red, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE) # 图像中轮廓检测
 
-    for cnt in contours:                                                   # 去除一些轮廓面积太小的噪声
+    for cnt in contours:
         if cnt.shape[0] < 500:
             continue
+
+        area = cv2.contourArea(cnt)
+        if area > max_area:
+            max_area = area
+            max_cnt = cnt
+
+    if max_cnt is not None:
+        (x, y, w, h) = cv2.boundingRect(max_cnt)
+        cv2.drawContours(image, [max_cnt], -1, (0, 255, 0), 2)
+        cv2.circle(image, (int(x+w/2), int(y+h/2)), 5, (0, 255, 0), -1)
+
+
+    # for cnt in contours:                                                   # 去除一些轮廓面积太小的噪声
+    #     if cnt.shape[0] < 500:
+    #         continue
+        
+    #     area = cv2.contourArea(cnt)
+    #     if area > max_area:
+    #         max_area = area
+    #         max_cnt = cnt
             
-        (x, y, w, h) = cv2.boundingRect(cnt)                               # 得到苹果所在轮廓的左上角xy像素坐标及轮廓范围的宽和高
-        cv2.drawContours(image, [cnt], -1, (0, 255, 0), 2)                 # 将苹果的轮廓勾勒出来
-        cv2.circle(image, (int(x+w/2), int(y+h/2)), 5, (0, 255, 0), -1)    # 将苹果的图像中心点画出来
+    #     (x, y, w, h) = cv2.boundingRect(max_cnt)                               # 得到苹果所在轮廓的左上角xy像素坐标及轮廓范围的宽和高
+    #     cv2.drawContours(image, [max_cnt], -1, (0, 255, 0), 2)                 # 将苹果的轮廓勾勒出来
+    #     cv2.circle(image, (int(x+w/2), int(y+h/2)), 5, (0, 255, 0), -1)    # 将苹果的图像中心点画出来
 	    
     cv2.imshow("object", image)                                            # 使用OpenCV显示处理后的图像效果
     cv2.waitKey(500)
